@@ -1,0 +1,1 @@
+docker run -itd --rm --name programmerstest -p 5000:5000 beduardo/advancedtest
