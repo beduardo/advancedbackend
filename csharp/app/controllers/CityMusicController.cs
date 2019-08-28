@@ -42,7 +42,7 @@ namespace advancedbackend.controllers
 
                     return NotFound();
                 } else {
-                    var resp = Service.GetTracksByCoords(lat, lon);
+                    var resp = await Service.GetTracksByCoords(lat, lon);
 
                     if (resp != null) {
                         return Ok(resp);

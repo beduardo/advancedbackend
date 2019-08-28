@@ -47,7 +47,7 @@ namespace advancedbackend.services
 
         public async Task<double> GetTemperatureByCoord(float lat, float lon)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={Config.Value.weather}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={Config.Value.weather}");
             var client = ClientFactory.CreateClient();
 
             var response = await client.SendAsync(request);
