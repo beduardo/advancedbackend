@@ -42,66 +42,83 @@ namespace advancedbackend_tests.controllers
         [InlineData("cityname")]
         [InlineData("cityname2")]
         [InlineData("cityname3")]
-        public void ByName_CallCorrectMethodOfDependency(string city)
+        public async void ByName_CallCorrectMethodOfDependency(string city)
         {
             //Prepare
             var obt = CreateTestObject();
 
             //Execute
-            obt.Get(city, 0, 0);
+            await obt.Get(city, 0, 0);
 
             //Verify
             serviceMock.Verify(m => m.GetTracksByCityName(city), Times.AtLeastOnce());
         }
 
         [Fact]
-        public void ByName_CityNameA_GetCorrectResponse()
+        public async void ByName_CityNameA_GetCorrectResponse()
         {
             //Prepare
             var obt = CreateTestObject();
 
-            serviceMock.Setup(m => m.GetTracksByCityName("cityA")).Returns(new[] {
-                new Track { Name = "trackA1" },
-                new Track { Name = "trackA2" },
-                new Track { Name = "trackA3" },
+            serviceMock.Setup(m => m.GetTracksByCityName("cityA"))
+            .ReturnsAsync(new CityTracks {
+                Temperature = 20.5,
+                Type = "TypeX",
+                Tracks = new [] {
+                    new Track { Name = "trackA1" },
+                    new Track { Name = "trackA2" },
+                    new Track { Name = "trackA3" },
+                }
             });
 
             //Execute
-            var resp = obt.Get("cityA", 0, 0);
+            var resp = await obt.Get("cityA", 0, 0);
 
             //Verify
             resp.Should().BeOfType<OkObjectResult>();
             var respTyped = (OkObjectResult)resp;
-            respTyped.Value.Should().BeEquivalentTo(new[] {
-                new Track { Name = "trackA1" },
-                new Track { Name = "trackA2" },
-                new Track { Name = "trackA3" },
+            respTyped.Value.Should().BeEquivalentTo(new CityTracks {
+                Temperature = 20.5,
+                Type = "TypeX",
+                Tracks = new [] {
+                    new Track { Name = "trackA1" },
+                    new Track { Name = "trackA2" },
+                    new Track { Name = "trackA3" },
+                }
             });
 
         }
 
         [Fact]
-        public void ByName_CityNameB_GetCorrectResponse()
+        public async void ByName_CityNameB_GetCorrectResponse()
         {
             //Prepare
             var obt = CreateTestObject();
 
-            serviceMock.Setup(m => m.GetTracksByCityName("cityB")).Returns(new[] {
-                new Track { Name = "trackB1" },
-                new Track { Name = "trackB2" },
-                new Track { Name = "trackB3" },
+            serviceMock.Setup(m => m.GetTracksByCityName("cityB")).ReturnsAsync(new CityTracks {
+                Temperature = 10.9,
+                Type = "TypeY",
+                Tracks = new [] {
+                    new Track { Name = "trackB1" },
+                    new Track { Name = "trackB2" },
+                    new Track { Name = "trackB3" },
+                }
             });
 
             //Execute
-            var resp = obt.Get("cityB", 0, 0);
+            var resp = await obt.Get("cityB", 0, 0);
 
             //Verify
             resp.Should().BeOfType<OkObjectResult>();
             var respTyped = (OkObjectResult)resp;
-            respTyped.Value.Should().BeEquivalentTo(new[] {
-                new Track { Name = "trackB1" },
-                new Track { Name = "trackB2" },
-                new Track { Name = "trackB3" },
+            respTyped.Value.Should().BeEquivalentTo(new CityTracks {
+                Temperature = 10.9,
+                Type = "TypeY",
+                Tracks = new [] {
+                    new Track { Name = "trackB1" },
+                    new Track { Name = "trackB2" },
+                    new Track { Name = "trackB3" },
+                }
             });
 
         }
@@ -110,13 +127,13 @@ namespace advancedbackend_tests.controllers
         [InlineData(10, 11)]
         [InlineData(30, -15.2)]
         [InlineData(-40.3, -16.23)]
-        public void ByCoord_CallCorrectMethodOfDependency(float lat, float lon)
+        public async void ByCoord_CallCorrectMethodOfDependency(float lat, float lon)
         {
             //Prepare
             var obt = CreateTestObject();
 
             //Execute
-            obt.Get(null, lat, lon);
+            await obt.Get(null, lat, lon);
 
             //Verify
             serviceMock.Verify(m => m.GetTracksByCoords(lat, lon), Times.AtLeastOnce());
